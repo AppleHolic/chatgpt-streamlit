@@ -1,6 +1,7 @@
 {
     "mypy.dmypyExecutable": "${workspaceFolder}/.venv/bin/dmypy",
     "mypy.targets": [
-        "chatgpt_fastapi"
-    ]
+        "chatgpt_streamlit"
+    ],
+    "python.linting.pylintArgs": ["--rcfile=setup.cfg"]
 }
