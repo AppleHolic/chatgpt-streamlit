@@ -23,15 +23,18 @@ def main() -> None:
         st.markdown("---")
 
         # call APIs
-        if st.button("Call API - without TTS"):
+        is_with_tts = text_to_speech() is not None
+
+        if st.button("Call API - without TTS" if is_with_tts else "Call API"):
             setup_calling_api_seciton(audio_bytes)
             st.balloons()
 
-        if st.button("Call API - with TTS"):
-            answer = setup_calling_api_seciton(audio_bytes)
-            st.balloons()
-            spoken_answer = text_to_speech()(answer)
-            st.audio(spoken_answer, format="audio/wav")
+        if is_with_tts:
+            if st.button("Call API - with TTS"):
+                answer = setup_calling_api_seciton(audio_bytes)
+                st.balloons()
+                spoken_answer = text_to_speech()(answer)
+                st.audio(spoken_answer, format="audio/wav")
 
 
 def setup_calling_api_seciton(audio_bytes: bytes) -> Union[str, None]:

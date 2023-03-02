@@ -17,7 +17,7 @@ WHISPER_API_NAME: str = "whisper-1"
 # make a singletone instance for TTS
 @st.cache_resource 
 def text_to_speech() -> Union[Callable, None]:
-    if torch is None:
+    if not torch:
         return None
     
     model, symbols, sample_rate, _, apply_tts = torch.hub.load(
