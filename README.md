@@ -15,6 +15,7 @@ This project for making a demo based on ChatGPT and speech interfaces via [strea
   - python 3.10
   - GPU : cuda 11.6, RTX Titan
   - OS : ubuntu20.04 - wsl2
+  - IDE : VSCode
 
 - OpenAI API
   - You must get a secrey key of OpenAI platform from [This Page.](https://platform.openai.com/account/api-keys)
