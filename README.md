@@ -30,11 +30,11 @@ This project for making a demo based on ChatGPT and speech interfaces via [strea
     # openai - chatgpt, whisper only
     $ pip install .
 
-    # openai with simple TTS
-    $ pip install .[tts]
+    # openai with simple TTS (with cpu version of pytorch)
+    $ pip install .[tts] --extra-index-url https://download.pytorch.org/whl/cpu
 
     # run streamlit - with environment variable of API KEY
-    $ OPENAI_API_KEY=[YOUR-API-KEY] streamlit run chatgpt_streamlit/app.py
+    $ OPENAI_API_KEY=[YOUR-API-KEY] streamlit run chatgpt_streamlit/app.py 
     ```
 
 ## Others

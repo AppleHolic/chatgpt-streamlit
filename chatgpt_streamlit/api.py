@@ -19,40 +19,36 @@ WHISPER_API_NAME: str = "whisper-1"
 def text_to_speech() -> Union[Callable, None]:
     if torch is None:
         return None
-    # load tacotron2 model from torch hub
-    print("Loading Tacotron2 model from torch hub...")
-    tacotron2 = torch.hub.load('NVIDIA/DeepLearningExamples:torchhub', 'nvidia_tacotron2', model_math='fp16')
-    tacotron2 = tacotron2.to('cuda')
-    tacotron2.eval()
-
-    # load waveglow model from torch hub
-    print("Loading Waveglow model from torch hub...")
-    waveglow = torch.hub.load('NVIDIA/DeepLearningExamples:torchhub', 'nvidia_waveglow', model_math='fp16')
-    waveglow = waveglow.remove_weightnorm(waveglow)
-    waveglow = waveglow.to('cuda')
-
-    # load preprocessing utils
-    utils = torch.hub.load('NVIDIA/DeepLearningExamples:torchhub', 'nvidia_tts_utils')
+    
+    model, symbols, sample_rate, _, apply_tts = torch.hub.load(
+        repo_or_dir='snakers4/silero-models',
+        model='silero_tts',
+        language='en',
+        speaker='lj_16khz'
+    )
+    model = model.to('cpu')  # gpu or cpu
 
     # define forward function
     def forward(text: str) -> bytes:
-        # preprocess text
-        sequences, lengths = utils.prepare_input_sequence([text])
-
         with torch.inference_mode():
-            # text to mel
-            mel, _, _ = tacotron2.infer(sequences, lengths)
-            audio = waveglow.infer(mel)
+            audio = apply_tts(
+                texts=[sentence + '.' for sentence in text.split('.') if sentence],
+                model=model,
+                sample_rate=sample_rate,
+                symbols=symbols,
+                device='cpu'
+            )
 
         # mel to audio
-        audio_numpy = audio[0].data.cpu().numpy()
+        audio = torch.cat(audio, dim=-1).squeeze()
+        audio_numpy = audio.data.cpu().numpy()
         audio_bytes = audio_numpy.tobytes()
 
         # make a buffer
         buf = BytesIO(audio_bytes)
         
         # make a binary data of wav file from numpy array
-        sf.write(buf, audio_numpy, 22050, format="WAV", subtype="PCM_16")
+        sf.write(buf, audio_numpy, 16000, format="WAV", subtype="PCM_16")
 
         # return binary of wav file
         return buf.getvalue()
