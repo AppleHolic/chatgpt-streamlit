@@ -1,6 +1,6 @@
 import streamlit as st
 from audio_recorder_streamlit import audio_recorder
-from chatgpt_streamlit.api import call_chatgpt_api, call_whisper_api
+from chatgpt_streamlit.api import call_chatgpt_api, call_whisper_api, text_to_speech
 from typing import Union
 
 
@@ -30,6 +30,8 @@ def main() -> None:
         if st.button("Call API - with TTS"):
             answer = setup_calling_api_seciton(audio_bytes)
             st.balloons()
+            spoken_answer = text_to_speech()(answer)
+            st.audio(spoken_answer, format="audio/wav")
 
 
 def setup_calling_api_seciton(audio_bytes: bytes) -> Union[str, None]:
