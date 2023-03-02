@@ -1,6 +1,6 @@
-# ChatGPT FastAPI
+# ChatGPT Streamlit
 
-This project provides a unified API for accessing ChatGPT and other APIs related to speech and vision-based deep learning APIs.
+This project for making a demo based on ChatGPT via streamlit.
 
 ## OpenAI Developer API
 
