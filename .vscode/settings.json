@@ -1,0 +1,6 @@
+{
+    "mypy.dmypyExecutable": "${workspaceFolder}/.venv/bin/dmypy",
+    "mypy.targets": [
+        "chatgpt_fastapi"
+    ]
+}
